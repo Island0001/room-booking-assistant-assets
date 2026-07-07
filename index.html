@@ -8,6 +8,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#ffffff">
+  <meta http-equiv="Cache-Control" content="no-store">
+  <meta http-equiv="Pragma" content="no-cache">
   <title>会議室予約アシスタント</title>
   <link rel="icon" type="image/png" sizes="512x512" href="./app_icon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
@@ -34,11 +36,16 @@
   </main>
   <script>
     const APP_URL = 'https://script.google.com/macros/s/AKfycbwbnP0wGgB8j60FNN_ayNY9qTfu7SMmAetpxsnfwC9O-jzOauH9YVde5xyUv6GmcipmhQ/exec';
+    const APP_BUILD = '20260707-65';
     const STORAGE_KEY = 'roomBookingAssistantAccessKey';
     const params = new URLSearchParams(location.search);
     const access = params.get('access') || localStorage.getItem(STORAGE_KEY) || '';
     if(access) localStorage.setItem(STORAGE_KEY, access);
-    const target = access ? APP_URL + '?access=' + encodeURIComponent(access) : APP_URL;
+    const targetUrl = new URL(APP_URL);
+    if(access) targetUrl.searchParams.set('access', access);
+    targetUrl.searchParams.set('v', APP_BUILD);
+    targetUrl.searchParams.set('t', String(Date.now()));
+    const target = targetUrl.toString();
     const openLink = document.getElementById('openLink');
     openLink.href = target;
     document.getElementById('message').textContent = access ? 'アプリを開いています...' : 'このショートカットには認証情報がありません。管理者から発行された初回URLをSafariで開き、ホーム画面に追加し直してください。';
