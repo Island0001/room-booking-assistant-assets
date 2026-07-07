@@ -5,21 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="会議室予約">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="mobile-web-app-capable" content="yes">
   <title>会議室予約アシスタント</title>
   <link rel="icon" href="./app_icon.png">
   <link rel="apple-touch-icon" href="./app_icon.png">
   <style>
-    body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif;background:#f5f7fb;color:#0f172a}
+    html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif;background:#f5f7fb;color:#0f172a}
+    body{display:grid;place-items:center}
     main{width:min(420px,calc(100vw - 32px));display:grid;gap:16px;text-align:center}
     img{width:96px;height:96px;border-radius:22px;margin:0 auto;box-shadow:0 12px 28px rgba(15,23,42,.18)}
     h1{font-size:22px;margin:0}
     p{margin:0;color:#64748b;line-height:1.7}
     a{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 16px;border-radius:14px;background:#2563eb;color:white;text-decoration:none;font-weight:800}
+    iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:white}
+    .hidden{display:none}
   </style>
 </head>
 <body>
-  <main>
+  <main id="fallback">
     <img src="./app_icon.png" alt="">
     <h1>会議室予約アシスタント</h1>
     <p id="message">アプリを開いています...</p>
@@ -34,7 +38,14 @@
     const target = access ? APP_URL + '?access=' + encodeURIComponent(access) : APP_URL;
     document.getElementById('openLink').href = target;
     document.getElementById('message').textContent = access ? 'アプリを開いています...' : '初回URLから開いてください。';
-    if(access) location.replace(target);
+    if(access){
+      document.getElementById('fallback').className = 'hidden';
+      const frame = document.createElement('iframe');
+      frame.src = target;
+      frame.title = '会議室予約アシスタント';
+      frame.allow = 'clipboard-read; clipboard-write; fullscreen';
+      document.body.appendChild(frame);
+    }
   </script>
 </body>
 </html>
