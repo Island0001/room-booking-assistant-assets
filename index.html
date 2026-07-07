@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="会議室予約">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>会議室予約アシスタント</title>
+  <link rel="icon" href="./app_icon.png">
+  <link rel="apple-touch-icon" href="./app_icon.png">
+  <style>
+    body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif;background:#f5f7fb;color:#0f172a}
+    main{width:min(420px,calc(100vw - 32px));display:grid;gap:16px;text-align:center}
+    img{width:96px;height:96px;border-radius:22px;margin:0 auto;box-shadow:0 12px 28px rgba(15,23,42,.18)}
+    h1{font-size:22px;margin:0}
+    p{margin:0;color:#64748b;line-height:1.7}
+    a{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 16px;border-radius:14px;background:#2563eb;color:white;text-decoration:none;font-weight:800}
+  </style>
+</head>
+<body>
+  <main>
+    <img src="./app_icon.png" alt="">
+    <h1>会議室予約アシスタント</h1>
+    <p id="message">アプリを開いています...</p>
+    <a id="openLink" href="https://script.google.com/macros/s/AKfycbwbnP0wGgB8j60FNN_ayNY9qTfu7SMmAetpxsnfwC9O-jzOauH9YVde5xyUv6GmcipmhQ/exec">アプリを開く</a>
+  </main>
+  <script>
+    const APP_URL = 'https://script.google.com/macros/s/AKfycbwbnP0wGgB8j60FNN_ayNY9qTfu7SMmAetpxsnfwC9O-jzOauH9YVde5xyUv6GmcipmhQ/exec';
+    const STORAGE_KEY = 'roomBookingAssistantAccessKey';
+    const params = new URLSearchParams(location.search);
+    const access = params.get('access') || localStorage.getItem(STORAGE_KEY) || '';
+    if(access) localStorage.setItem(STORAGE_KEY, access);
+    const target = access ? APP_URL + '?access=' + encodeURIComponent(access) : APP_URL;
+    document.getElementById('openLink').href = target;
+    document.getElementById('message').textContent = access ? 'アプリを開いています...' : '初回URLから開いてください。';
+    if(access) location.replace(target);
+  </script>
+</body>
+</html>
