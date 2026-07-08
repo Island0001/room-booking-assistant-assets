@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="会議室予約">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -36,7 +37,7 @@
   </main>
   <script>
     const APP_URL = 'https://script.google.com/macros/s/AKfycbwbnP0wGgB8j60FNN_ayNY9qTfu7SMmAetpxsnfwC9O-jzOauH9YVde5xyUv6GmcipmhQ/exec';
-    const APP_BUILD = '20260708-72';
+    const APP_BUILD = '20260708-73';
     const STORAGE_KEY = 'roomBookingAssistantAccessKey';
     const params = new URLSearchParams(location.search);
     const access = params.get('access') || localStorage.getItem(STORAGE_KEY) || '';
