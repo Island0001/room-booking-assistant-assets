@@ -12,7 +12,6 @@
   <meta http-equiv="Cache-Control" content="no-store">
   <meta http-equiv="Pragma" content="no-cache">
   <title>会議室予約アシスタント</title>
-  <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" type="image/png" sizes="512x512" href="./app_icon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
   <link rel="apple-touch-icon-precomposed" sizes="180x180" href="./apple-touch-icon.png">
@@ -92,7 +91,7 @@
   </main>
   <script>
     const APP_URL = 'https://script.google.com/macros/s/AKfycbwbnP0wGgB8j60FNN_ayNY9qTfu7SMmAetpxsnfwC9O-jzOauH9YVde5xyUv6GmcipmhQ/exec';
-    const APP_BUILD = '20260708-75';
+    const APP_BUILD = '20260708-76';
     const STORAGE_KEY = 'roomBookingAssistantAccessKey';
     const params = new URLSearchParams(location.search);
     const urlAccess = params.get('access') || '';
@@ -104,6 +103,13 @@
     let deferredInstallPrompt = null;
 
     if (access) localStorage.setItem(STORAGE_KEY, access);
+
+    if (isAndroid) {
+      const manifest = document.createElement('link');
+      manifest.rel = 'manifest';
+      manifest.href = './manifest.webmanifest';
+      document.head.appendChild(manifest);
+    }
 
     function targetAppUrl(){
       const targetUrl = new URL(APP_URL);
