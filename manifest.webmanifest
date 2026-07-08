@@ -1,10 +1,27 @@
 {
   "name": "会議室予約アシスタント",
   "short_name": "会議室予約",
+  "id": "/room-booking-assistant-assets/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "background_color": "#f8fafc",
+  "theme_color": "#f8fafc",
+  "orientation": "portrait-primary",
+  "lang": "ja",
   "icons": [
+    {
+      "src": "./apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
     {
       "src": "./app_icon.png",
       "sizes": "512x512",

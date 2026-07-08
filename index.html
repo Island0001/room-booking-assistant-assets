@@ -8,57 +8,161 @@
   <meta name="apple-mobile-web-app-title" content="会議室予約">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="theme-color" content="#ffffff">
+  <meta name="theme-color" content="#f8fafc">
   <meta http-equiv="Cache-Control" content="no-store">
   <meta http-equiv="Pragma" content="no-cache">
   <title>会議室予約アシスタント</title>
+  <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" type="image/png" sizes="512x512" href="./app_icon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
   <link rel="apple-touch-icon-precomposed" sizes="180x180" href="./apple-touch-icon.png">
   <link rel="apple-touch-icon" href="./app_icon.png">
   <style>
-    html,body{margin:0;width:100%;height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif;background:#f5f7fb;color:#0f172a}
-    body{display:grid;place-items:center}
-    main{width:min(420px,calc(100vw - 32px));display:grid;gap:16px;text-align:center}
-    img{width:96px;height:96px;border-radius:22px;margin:0 auto;box-shadow:0 12px 28px rgba(15,23,42,.18)}
-    h1{font-size:22px;margin:0}
-    p{margin:0;color:#64748b;line-height:1.7}
-    a{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 16px;border-radius:14px;background:#2563eb;color:white;text-decoration:none;font-weight:800}
-    iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:white}
-    .hidden{display:none}
+    :root{--bg:#f4f7fb;--card:#fff;--text:#0f172a;--muted:#64748b;--line:#dbe4ef;--blue:#2563eb;--blue-50:#eff6ff;--green:#15803d;--green-50:#ecfdf5;--red:#b91c1c;--red-50:#fef2f2;--shadow:0 18px 48px rgba(15,23,42,.14)}
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif;background:var(--bg);color:var(--text)}
+    body{min-height:100dvh}
+    .install-page{min-height:100dvh;padding:24px 16px calc(24px + env(safe-area-inset-bottom));display:grid;align-items:center}
+    .shell{width:min(480px,100%);margin:0 auto;display:grid;gap:16px}
+    .hero{display:grid;gap:14px;text-align:center}
+    .app-icon{width:86px;height:86px;border-radius:22px;margin:0 auto;box-shadow:0 14px 34px rgba(15,23,42,.18)}
+    h1{font-size:25px;line-height:1.25;margin:0;letter-spacing:0}
+    p{margin:0;color:var(--muted);line-height:1.7}
+    .card{background:var(--card);border:1px solid rgba(219,228,239,.9);border-radius:18px;box-shadow:var(--shadow);padding:18px;display:grid;gap:14px}
+    .status{border-radius:14px;padding:12px 14px;background:var(--blue-50);color:#1d4ed8;font-weight:800;line-height:1.5}
+    .status.missing{background:var(--red-50);color:var(--red)}
+    .steps{display:grid;gap:10px}
+    .step{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:start;border:1px solid var(--line);border-radius:14px;background:#f8fafc;padding:12px;text-align:left}
+    .step b{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#e0edff;color:#1d4ed8;font-size:14px}
+    .step strong{display:block;font-size:15px;line-height:1.35}
+    .step span{display:block;color:var(--muted);font-size:13px;line-height:1.55;margin-top:2px}
+    .actions{display:grid;gap:10px}
+    button,a{appearance:none;border:0;text-decoration:none;font:inherit}
+    .btn{min-height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;padding:0 16px;font-weight:900;cursor:pointer}
+    .btn.primary{background:var(--blue);color:#fff}
+    .btn.install{background:var(--green);color:#fff}
+    .btn.secondary{background:#fff;color:var(--text);border:1px solid var(--line)}
+    .btn:disabled{opacity:.58;cursor:not-allowed}
+    .hint{font-size:12px;color:var(--muted);line-height:1.6;text-align:center}
+    .device-note{display:grid;gap:8px}
+    .device-note h2{margin:0;font-size:15px}
+    .device-note.android .step b{background:var(--green-50);color:var(--green)}
+    .hidden{display:none!important}
+    iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#fff}
+    @media(min-width:720px){.install-page{padding:36px}.app-icon{width:98px;height:98px}.card{padding:22px}}
   </style>
 </head>
 <body>
-  <main id="fallback">
-    <img src="./app_icon.png" alt="">
-    <h1>会議室予約アシスタント</h1>
-    <p id="message">アプリを開いています...</p>
-    <a id="openLink" href="https://script.google.com/macros/s/AKfycbwbnP0wGgB8j60FNN_ayNY9qTfu7SMmAetpxsnfwC9O-jzOauH9YVde5xyUv6GmcipmhQ/exec">アプリを開く</a>
+  <main id="installPage" class="install-page">
+    <div class="shell">
+      <section class="hero">
+        <img class="app-icon" src="./app_icon.png" alt="">
+        <div>
+          <h1>会議室予約をホーム画面に追加</h1>
+          <p>最初の1回だけ設定します。追加後は、ホーム画面のアイコンを押すだけで使えます。</p>
+        </div>
+      </section>
+      <section class="card" aria-live="polite">
+        <div id="status" class="status">この端末に利用準備を保存しました。下の手順でホーム画面に追加してください。</div>
+        <div id="iosGuide" class="device-note">
+          <h2>iPhone / iPad の場合</h2>
+          <div class="steps">
+            <div class="step"><b>1</b><div><strong>Safariでこの画面を開く</strong><span>LINEやメールアプリ内で開いている場合は、メニューから「Safariで開く」を選んでください。</span></div></div>
+            <div class="step"><b>2</b><div><strong>共有ボタンを押す</strong><span>画面下または上にある、四角から上矢印が出ているボタンです。</span></div></div>
+            <div class="step"><b>3</b><div><strong>「ホーム画面に追加」を選ぶ</strong><span>名前は「会議室予約」のままで追加できます。</span></div></div>
+            <div class="step"><b>4</b><div><strong>追加されたアイコンから開く</strong><span>次回からはSafariではなく、ホーム画面のアイコンを押してください。</span></div></div>
+          </div>
+        </div>
+        <div id="androidGuide" class="device-note android hidden">
+          <h2>Android の場合</h2>
+          <div class="steps">
+            <div class="step"><b>1</b><div><strong>Chromeでこの画面を開く</strong><span>LINEやメールアプリ内で開いている場合は、メニューから「Chromeで開く」を選んでください。</span></div></div>
+            <div class="step"><b>2</b><div><strong>「Androidでインストール」を押す</strong><span>ボタンが出ない場合は、Chromeのメニューから「アプリをインストール」または「ホーム画面に追加」を選びます。</span></div></div>
+            <div class="step"><b>3</b><div><strong>追加を確認する</strong><span>確認画面が出たら「インストール」または「追加」を押してください。</span></div></div>
+            <div class="step"><b>4</b><div><strong>追加されたアイコンから開く</strong><span>次回からはChromeではなく、ホーム画面のアイコンを押してください。</span></div></div>
+          </div>
+        </div>
+        <div class="actions">
+          <button id="installButton" class="btn install hidden" type="button">Androidでインストール</button>
+          <button id="openAppButton" class="btn primary" type="button">今回はブラウザで開く</button>
+        </div>
+        <p class="hint">このURLは本人確認用の情報を含みます。他の人へ転送しないでください。</p>
+      </section>
+    </div>
   </main>
   <script>
     const APP_URL = 'https://script.google.com/macros/s/AKfycbwbnP0wGgB8j60FNN_ayNY9qTfu7SMmAetpxsnfwC9O-jzOauH9YVde5xyUv6GmcipmhQ/exec';
-    const APP_BUILD = '20260708-74';
+    const APP_BUILD = '20260708-75';
     const STORAGE_KEY = 'roomBookingAssistantAccessKey';
     const params = new URLSearchParams(location.search);
-    const access = params.get('access') || localStorage.getItem(STORAGE_KEY) || '';
-    if(access) localStorage.setItem(STORAGE_KEY, access);
-    const targetUrl = new URL(APP_URL);
-    if(access) targetUrl.searchParams.set('access', access);
-    targetUrl.searchParams.set('v', APP_BUILD);
-    targetUrl.searchParams.set('t', String(Date.now()));
-    const target = targetUrl.toString();
-    const openLink = document.getElementById('openLink');
-    openLink.href = target;
-    document.getElementById('message').textContent = access ? 'アプリを開いています...' : 'このショートカットには認証情報がありません。管理者から発行された初回URLをSafariで開き、ホーム画面に追加し直してください。';
-    if(access){
-      document.getElementById('fallback').className = 'hidden';
+    const urlAccess = params.get('access') || '';
+    const storedAccess = localStorage.getItem(STORAGE_KEY) || '';
+    const access = urlAccess || storedAccess;
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    const isFirstAccessUrl = Boolean(urlAccess);
+    let deferredInstallPrompt = null;
+
+    if (access) localStorage.setItem(STORAGE_KEY, access);
+
+    function targetAppUrl(){
+      const targetUrl = new URL(APP_URL);
+      if(access) targetUrl.searchParams.set('access', access);
+      targetUrl.searchParams.set('v', APP_BUILD);
+      targetUrl.searchParams.set('t', String(Date.now()));
+      return targetUrl.toString();
+    }
+
+    function openApp(){
+      document.getElementById('installPage').className = 'hidden';
       const frame = document.createElement('iframe');
-      frame.src = target;
+      frame.src = targetAppUrl();
       frame.title = '会議室予約アシスタント';
       frame.allow = 'clipboard-read; clipboard-write; fullscreen';
       document.body.appendChild(frame);
-    }else{
-      openLink.className = 'hidden';
+    }
+
+    function showMissingAccess(){
+      document.getElementById('status').className = 'status missing';
+      document.getElementById('status').textContent = 'このショートカットには認証情報がありません。管理者から届いたアプリ追加URLを、SafariまたはChromeで開き直してください。';
+      document.getElementById('openAppButton').disabled = true;
+    }
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+    }
+
+    window.addEventListener('beforeinstallprompt', event => {
+      event.preventDefault();
+      deferredInstallPrompt = event;
+      if (access && !isStandalone) document.getElementById('installButton').classList.remove('hidden');
+    });
+
+    document.getElementById('installButton').addEventListener('click', async () => {
+      if (!deferredInstallPrompt) return;
+      const button = document.getElementById('installButton');
+      button.disabled = true;
+      deferredInstallPrompt.prompt();
+      try {
+        await deferredInstallPrompt.userChoice;
+      } finally {
+        deferredInstallPrompt = null;
+        button.classList.add('hidden');
+        button.disabled = false;
+      }
+    });
+
+    document.getElementById('openAppButton').addEventListener('click', openApp);
+
+    if (isAndroid) {
+      document.getElementById('iosGuide').classList.add('hidden');
+      document.getElementById('androidGuide').classList.remove('hidden');
+    }
+
+    if (!access) {
+      showMissingAccess();
+    } else if (isStandalone || params.get('open') === '1' || !isFirstAccessUrl) {
+      openApp();
     }
   </script>
 </body>
