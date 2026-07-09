@@ -11,7 +11,7 @@
   "lang": "ja",
   "icons": [
     {
-      "src": "./apple-touch-icon.png",
+      "src": "./apple-touch-icon-180-v2.png",
       "sizes": "180x180",
       "type": "image/png",
       "purpose": "any"
@@ -23,7 +23,7 @@
       "purpose": "any maskable"
     },
     {
-      "src": "./app_icon.png",
+      "src": "./app-icon-512-v2.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"

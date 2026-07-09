@@ -1,8 +1,8 @@
-const CACHE_NAME = 'room-booking-assistant-install-v1';
+const CACHE_NAME = 'room-booking-assistant-install-v2';
 const ASSETS = [
-  './app_icon.png',
+  './app-icon-512-v2.png',
   './icon-192.png',
-  './apple-touch-icon.png',
+  './apple-touch-icon-180-v2.png',
   './manifest.webmanifest'
 ];
 
@@ -15,7 +15,11 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('activate', event => {
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(
+    caches.keys()
+      .then(keys => Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))))
+      .then(() => self.clients.claim())
+  );
 });
 
 self.addEventListener('fetch', event => {
