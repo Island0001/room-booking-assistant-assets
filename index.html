@@ -91,7 +91,7 @@
   </main>
   <script>
     const APP_URL = 'https://script.google.com/macros/s/AKfycbwbnP0wGgB8j60FNN_ayNY9qTfu7SMmAetpxsnfwC9O-jzOauH9YVde5xyUv6GmcipmhQ/exec';
-    const APP_BUILD = '20260708-76';
+    const APP_BUILD = '20260709-direct-open';
     const STORAGE_KEY = 'roomBookingAssistantAccessKey';
     const params = new URLSearchParams(location.search);
     const urlAccess = params.get('access') || '';
@@ -120,12 +120,7 @@
     }
 
     function openApp(){
-      document.getElementById('installPage').className = 'hidden';
-      const frame = document.createElement('iframe');
-      frame.src = targetAppUrl();
-      frame.title = '会議室予約アシスタント';
-      frame.allow = 'clipboard-read; clipboard-write; fullscreen';
-      document.body.appendChild(frame);
+      location.replace(targetAppUrl());
     }
 
     function showMissingAccess(){
