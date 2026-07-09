@@ -91,7 +91,7 @@
   </main>
   <script>
     const APP_URL = 'https://script.google.com/macros/s/AKfycbwbnP0wGgB8j60FNN_ayNY9qTfu7SMmAetpxsnfwC9O-jzOauH9YVde5xyUv6GmcipmhQ/exec';
-    const APP_BUILD = '20260709-direct-open';
+    const APP_BUILD = '20260709-frame-safe';
     const STORAGE_KEY = 'roomBookingAssistantAccessKey';
     const params = new URLSearchParams(location.search);
     const urlAccess = params.get('access') || '';
@@ -119,8 +119,36 @@
       return targetUrl.toString();
     }
 
-    function openApp(){
+    function directOpenApp(){
       location.replace(targetAppUrl());
+    }
+
+    function openApp(){
+      const button = document.getElementById('openAppButton');
+      const status = document.getElementById('status');
+      status.textContent = 'アプリを読み込んでいます。';
+      button.disabled = true;
+      let loaded = false;
+      const frame = document.createElement('iframe');
+      frame.src = targetAppUrl();
+      frame.title = '会議室予約アシスタント';
+      frame.allow = 'clipboard-read; clipboard-write; fullscreen';
+      frame.style.display = 'none';
+      frame.addEventListener('load', () => {
+        loaded = true;
+        frame.style.display = 'block';
+        document.getElementById('installPage').className = 'hidden';
+      });
+      document.body.appendChild(frame);
+      setTimeout(() => {
+        if (loaded) return;
+        button.disabled = false;
+        button.textContent = '直接開く';
+        button.removeEventListener('click', openApp);
+        button.addEventListener('click', directOpenApp);
+        status.className = 'status missing';
+        status.textContent = '読み込みに時間がかかっています。白い画面のままなら「直接開く」を押してください。';
+      }, 5000);
     }
 
     function showMissingAccess(){
