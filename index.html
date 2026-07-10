@@ -99,7 +99,6 @@
     const access = urlAccess || storedAccess;
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
     const isAndroid = /Android/i.test(navigator.userAgent);
-    const isFirstAccessUrl = Boolean(urlAccess);
     let deferredInstallPrompt = null;
 
     if (access) localStorage.setItem(STORAGE_KEY, access);
@@ -162,7 +161,7 @@
 
     if (!access) {
       showMissingAccess();
-    } else if (isStandalone || params.get('open') === '1' || !isFirstAccessUrl) {
+    } else if (isStandalone || params.get('open') === '1') {
       openApp();
     }
   </script>
