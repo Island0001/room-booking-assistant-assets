@@ -12,11 +12,10 @@
   <meta http-equiv="Cache-Control" content="no-store">
   <meta http-equiv="Pragma" content="no-cache">
   <title>会議室予約アシスタント</title>
-  <link rel="preload" as="image" href="https://island0001.github.io/room-booking-assistant-assets/apple-touch-icon-180-v2.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="https://island0001.github.io/room-booking-assistant-assets/app-icon-512-v2.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="https://island0001.github.io/room-booking-assistant-assets/apple-touch-icon-180-v2.png">
-  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="https://island0001.github.io/room-booking-assistant-assets/apple-touch-icon-180-v2.png">
-  <link rel="apple-touch-icon" href="https://island0001.github.io/room-booking-assistant-assets/apple-touch-icon-180-v2.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="./app_icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="./apple-touch-icon.png">
+  <link rel="apple-touch-icon" href="./app_icon.png">
   <style>
     :root{--bg:#f4f7fb;--card:#fff;--text:#0f172a;--muted:#64748b;--line:#dbe4ef;--blue:#2563eb;--blue-50:#eff6ff;--green:#15803d;--green-50:#ecfdf5;--red:#b91c1c;--red-50:#fef2f2;--shadow:0 18px 48px rgba(15,23,42,.14)}
     *{box-sizing:border-box}
@@ -92,13 +91,9 @@
   </main>
   <script>
     const APP_URL = 'https://script.google.com/macros/s/AKfycbwbnP0wGgB8j60FNN_ayNY9qTfu7SMmAetpxsnfwC9O-jzOauH9YVde5xyUv6GmcipmhQ/exec';
-    const APP_BUILD = '20260710-install-icon-stable';
+    const APP_BUILD = '20260709-direct-open';
     const STORAGE_KEY = 'roomBookingAssistantAccessKey';
     const params = new URLSearchParams(location.search);
-    const isIOS = /iP(hone|ad|od)/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    if (isIOS && !location.pathname.endsWith('/ios-install-20260710.html')) {
-      location.replace(new URL('./ios-install-20260710.html' + location.search + location.hash, location.href).toString());
-    }
     const urlAccess = params.get('access') || '';
     const storedAccess = localStorage.getItem(STORAGE_KEY) || '';
     const access = urlAccess || storedAccess;
@@ -134,7 +129,7 @@
       document.getElementById('openAppButton').disabled = true;
     }
 
-    if (!isIOS && 'serviceWorker' in navigator) {
+    if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./service-worker.js').catch(() => {});
     }
 
@@ -167,7 +162,7 @@
 
     if (!access) {
       showMissingAccess();
-    } else if (isStandalone || params.get('open') === '1') {
+    } else if (isStandalone || params.get('open') === '1' || !isFirstAccessUrl) {
       openApp();
     }
   </script>
