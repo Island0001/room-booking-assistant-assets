@@ -48,10 +48,26 @@
     .device-note.android .step b{background:var(--green-50);color:var(--green)}
     .hidden{display:none!important}
     iframe{position:fixed;inset:0;width:100%;height:100%;border:0;background:#fff}
+    .splash{position:fixed;inset:0;display:none;place-items:center;background:var(--bg);z-index:10}
+    .splash-inner{display:grid;gap:14px;text-align:center}
+    .splash p{font-weight:700}
+    html.standalone .splash{display:grid}
+    html.standalone .install-page{display:none}
     @media(min-width:720px){.install-page{padding:36px}.app-icon{width:98px;height:98px}.card{padding:22px}}
   </style>
+  <script>
+    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+      document.documentElement.classList.add('standalone');
+    }
+  </script>
 </head>
 <body>
+  <div class="splash" aria-hidden="true">
+    <div class="splash-inner">
+      <img class="app-icon" src="./app_icon.png" alt="">
+      <p>会議室予約アシスタントを起動中…</p>
+    </div>
+  </div>
   <main id="installPage" class="install-page">
     <div class="shell">
       <section class="hero">
