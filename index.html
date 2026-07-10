@@ -138,6 +138,21 @@
       location.replace(targetAppUrl());
     }
 
+    function embedApp(){
+      // standalone起動時はリダイレクトせずiframeで埋め込む(Googleの警告バナー非表示・画面遷移なし)
+      const frame = document.createElement('iframe');
+      let loaded = false;
+      frame.addEventListener('load', () => {
+        loaded = true;
+        // 外枠読み込み後、内側のsandboxFrame描画を少し待ってからスプラッシュを消す
+        setTimeout(() => document.querySelector('.splash').classList.add('hidden'), 600);
+      });
+      frame.src = targetAppUrl();
+      document.body.appendChild(frame);
+      // 白画面保険: 8秒以内に読み込めなければ従来のリダイレクト方式へ戻す
+      setTimeout(() => { if (!loaded) openApp(); }, 8000);
+    }
+
     function showMissingAccess(){
       document.getElementById('status').className = 'status missing';
       document.getElementById('status').textContent = 'このショートカットには認証情報がありません。管理者から届いたアプリ追加URLを、SafariまたはChromeで開き直してください。';
@@ -177,7 +192,9 @@
 
     if (!access) {
       showMissingAccess();
-    } else if (isStandalone || params.get('open') === '1') {
+    } else if (isStandalone) {
+      embedApp();
+    } else if (params.get('open') === '1') {
       openApp();
     }
   </script>
