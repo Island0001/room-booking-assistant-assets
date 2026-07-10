@@ -95,6 +95,10 @@
     const APP_BUILD = '20260710-install-icon-stable';
     const STORAGE_KEY = 'roomBookingAssistantAccessKey';
     const params = new URLSearchParams(location.search);
+    const isIOS = /iP(hone|ad|od)/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    if (isIOS && !location.pathname.endsWith('/ios-install-20260710.html')) {
+      location.replace(new URL('./ios-install-20260710.html' + location.search + location.hash, location.href).toString());
+    }
     const urlAccess = params.get('access') || '';
     const storedAccess = localStorage.getItem(STORAGE_KEY) || '';
     const access = urlAccess || storedAccess;
@@ -130,7 +134,7 @@
       document.getElementById('openAppButton').disabled = true;
     }
 
-    if ('serviceWorker' in navigator) {
+    if (!isIOS && 'serviceWorker' in navigator) {
       navigator.serviceWorker.register('./service-worker.js').catch(() => {});
     }
 

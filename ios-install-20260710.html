@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="会議室予約">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#f8fafc">
+  <meta http-equiv="Cache-Control" content="no-store">
+  <meta http-equiv="Pragma" content="no-cache">
+  <title>会議室予約</title>
+  <link rel="preload" as="image" href="https://island0001.github.io/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="https://island0001.github.io/app-icon-512.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://island0001.github.io/apple-touch-icon.png">
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="https://island0001.github.io/apple-touch-icon-precomposed.png">
+  <link rel="apple-touch-icon" href="https://island0001.github.io/apple-touch-icon.png">
+  <style>
+    :root{--bg:#f4f7fb;--card:#fff;--text:#0f172a;--muted:#64748b;--line:#dbe4ef;--blue:#2563eb;--blue-50:#eff6ff;--red:#b91c1c;--red-50:#fef2f2;--shadow:0 18px 48px rgba(15,23,42,.14)}
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif;background:var(--bg);color:var(--text)}
+    body{min-height:100dvh}
+    .install-page{min-height:100dvh;padding:24px 16px calc(24px + env(safe-area-inset-bottom));display:grid;align-items:center}
+    .shell{width:min(480px,100%);margin:0 auto;display:grid;gap:16px}
+    .hero{display:grid;gap:14px;text-align:center}
+    .app-icon{width:92px;height:92px;border-radius:22px;margin:0 auto;box-shadow:0 14px 34px rgba(15,23,42,.18)}
+    h1{font-size:25px;line-height:1.25;margin:0;letter-spacing:0}
+    p{margin:0;color:var(--muted);line-height:1.7}
+    .card{background:var(--card);border:1px solid rgba(219,228,239,.9);border-radius:18px;box-shadow:var(--shadow);padding:18px;display:grid;gap:14px}
+    .status{border-radius:14px;padding:12px 14px;background:var(--blue-50);color:#1d4ed8;font-weight:800;line-height:1.5}
+    .status.missing{background:var(--red-50);color:var(--red)}
+    .steps{display:grid;gap:10px}
+    .step{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:start;border:1px solid var(--line);border-radius:14px;background:#f8fafc;padding:12px;text-align:left}
+    .step b{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#e0edff;color:#1d4ed8;font-size:14px}
+    .step strong{display:block;font-size:15px;line-height:1.35}
+    .step span{display:block;color:var(--muted);font-size:13px;line-height:1.55;margin-top:2px}
+    .actions{display:grid;gap:10px}
+    button{appearance:none;border:0;text-decoration:none;font:inherit}
+    .btn{min-height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;padding:0 16px;font-weight:900;cursor:pointer}
+    .btn.primary{background:var(--blue);color:#fff}
+    .btn:disabled{opacity:.58;cursor:not-allowed}
+    .hint{font-size:12px;color:var(--muted);line-height:1.6;text-align:center}
+  </style>
+</head>
+<body>
+  <main class="install-page">
+    <div class="shell">
+      <section class="hero">
+        <img class="app-icon" src="https://island0001.github.io/apple-touch-icon.png" alt="">
+        <div>
+          <h1>会議室予約をホーム画面に追加</h1>
+          <p>iPhone専用の追加ページです。この画面のままホーム画面に追加してください。</p>
+        </div>
+      </section>
+      <section class="card" aria-live="polite">
+        <div id="status" class="status">この端末に利用準備を保存しました。下の手順でホーム画面に追加してください。</div>
+        <div class="steps">
+          <div class="step"><b>1</b><div><strong>共有ボタンを押す</strong><span>画面下または上にある、四角から上矢印が出ているボタンです。</span></div></div>
+          <div class="step"><b>2</b><div><strong>「ホーム画面に追加」を選ぶ</strong><span>追加前のプレビューでアイコンを確認してください。</span></div></div>
+          <div class="step"><b>3</b><div><strong>「追加」を押す</strong><span>追加後はホーム画面の「会議室予約」アイコンから開いてください。</span></div></div>
+        </div>
+        <div class="actions">
+          <button id="openAppButton" class="btn primary" type="button">今回はブラウザで開く</button>
+        </div>
+        <p class="hint">このURLは本人確認用の情報を含みます。他の人へ転送しないでください。</p>
+      </section>
+    </div>
+  </main>
+  <script>
+    const APP_URL = 'https://script.google.com/macros/s/AKfycbwbnP0wGgB8j60FNN_ayNY9qTfu7SMmAetpxsnfwC9O-jzOauH9YVde5xyUv6GmcipmhQ/exec';
+    const APP_BUILD = '20260710-ios-clean-install';
+    const STORAGE_KEY = 'roomBookingAssistantAccessKey';
+    const params = new URLSearchParams(location.search);
+    const urlAccess = params.get('access') || '';
+    const storedAccess = localStorage.getItem(STORAGE_KEY) || '';
+    const access = urlAccess || storedAccess;
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(reg => reg.unregister())).catch(() => {});
+    }
+    if (access) localStorage.setItem(STORAGE_KEY, access);
+
+    function targetAppUrl(){
+      const targetUrl = new URL(APP_URL);
+      if(access) targetUrl.searchParams.set('access', access);
+      targetUrl.searchParams.set('v', APP_BUILD);
+      targetUrl.searchParams.set('t', String(Date.now()));
+      return targetUrl.toString();
+    }
+    function openApp(){ location.replace(targetAppUrl()); }
+    function showMissingAccess(){
+      document.getElementById('status').className = 'status missing';
+      document.getElementById('status').textContent = 'このショートカットには認証情報がありません。管理者から届いたアプリ追加URLをSafariで開き直してください。';
+      document.getElementById('openAppButton').disabled = true;
+    }
+    document.getElementById('openAppButton').addEventListener('click', openApp);
+    if (!access) showMissingAccess();
+    else if (isStandalone || params.get('open') === '1') openApp();
+  </script>
+</body>
+</html>
