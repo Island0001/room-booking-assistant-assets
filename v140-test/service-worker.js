@@ -1,4 +1,4 @@
-const CACHE_NAME = 'room-booking-assistant-v140-test-119';
+const CACHE_NAME = 'room-booking-assistant-v140-test-120';
 const ASSETS = [
   './',
   './manifest.webmanifest',

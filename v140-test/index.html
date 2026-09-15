@@ -46,7 +46,7 @@
   </main>
   <script>
     const APP_URL = 'https://script.google.com/macros/s/AKfycbwK7UPx7YULBvnvmTmFrcbbxd_qhTDvV7Nweun18MozifJJ5n620l7ErGM95COCRsVLMg/exec';
-    const APP_BUILD = 'v1.4.0-test-119';
+    const APP_BUILD = 'v1.4.0-test-120';
     const STORAGE_KEY = 'roomBookingAssistantAccessKey';
     const params = new URLSearchParams(location.search);
     const urlAccess = params.get('access') || '';
@@ -91,7 +91,7 @@
 
       const badge = document.createElement('div');
       badge.className = 'test-badge';
-      badge.textContent = 'TEST @119';
+      badge.textContent = 'TEST @120';
       document.body.appendChild(badge);
       setTimeout(() => { if (!loaded) openApp(); }, 8000);
     }
